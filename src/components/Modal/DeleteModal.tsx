@@ -13,7 +13,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, closeModal, companyId
     const queryClient = useQueryClient()
 
     const deleteCompany = async () => {
-        if (!companyId) return;
+        if (!companyId) return
         const token = localStorage.getItem("authToken") || ""
         await instance().delete(`/companies/delete/by-id`, {
             data:  companyId,
@@ -42,7 +42,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, closeModal, companyId
                 <Button onClick={closeModal}>Cancel</Button>
             </div>
         </Modal>
-    );
-};
+    )
+}
 
 export default DeleteModal

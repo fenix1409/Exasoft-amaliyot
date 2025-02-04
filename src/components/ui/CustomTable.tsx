@@ -1,9 +1,10 @@
 import { Table, Button, Popover } from "antd"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { instance } from "../../hook/useAxios"
 import { MoreOutlined } from "@ant-design/icons"
 import DeleteModal from "../Modal/DeleteModal"
 import { useState } from "react"
+import AddModal, { CompanyType } from "../Modal/Addmodal"
 
 const fetchCompanies = async () => {
     const token = localStorage.getItem("authToken") || "";
@@ -19,18 +20,19 @@ const fetchCompanies = async () => {
 }
 
 const CustomTable = () => {
-    const queryClient = useQueryClient();
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
     const [selected, setSelected] = useState<string | null>(null)
+    const [isOpenEditModal, setIsOpenEditModal] = useState<boolean>(false)
+    const [editCompany, setEditCompany] = useState<CompanyType | null>(null)
 
     const { data: companies, isLoading } = useQuery({
         queryKey: ["companies"],
         queryFn: fetchCompanies
     })
 
-    const handleEdit = (id: string) => {
-        console.log("Edit company:", id)
-        queryClient.invalidateQueries({ queryKey: ["companies"] })
+    const handleEdit = (company: CompanyType) => {
+        setEditCompany(company)
+        setIsOpenEditModal(true)
     }
 
     const openDeleteModal = (id: string) => {
@@ -43,11 +45,10 @@ const CustomTable = () => {
         setSelected(null)
     }
 
-    // TABLE PART
-    const renderActions = (id: string) => (
+    const renderActions = (company: CompanyType) => (
         <div className="flex flex-col gap-2">
-            <button onClick={() => handleEdit(id)} className="text-blue-500">Edit</button>
-            <button onClick={() => openDeleteModal(id)} className="text-red-500">Delete</button>
+            <button onClick={() => handleEdit(company)} className="text-blue-500">Edit</button>
+            <button onClick={() => openDeleteModal(company.id)} className="text-red-500">Delete</button>
         </div>
     )
 
@@ -57,8 +58,8 @@ const CustomTable = () => {
         {
             title: "Action",
             key: "action",
-            render: (record: any) => (
-                <Popover content={renderActions(record.id)} trigger={"click"}>
+            render: (record: CompanyType) => (
+                <Popover content={renderActions(record)} trigger={"click"}>
                     <Button icon={<MoreOutlined />} />
                 </Popover>
             )
@@ -75,8 +76,13 @@ const CustomTable = () => {
                 pagination={{ pageSize: 10 }}
             />
             <DeleteModal isOpen={isOpenModal} closeModal={closeModal} companyId={selected || undefined} />
+            <AddModal 
+                isOpen={isOpenEditModal} 
+                closeModal={() => { setIsOpenEditModal(false); setEditCompany(null); }} 
+                companyEdit={editCompany || undefined} 
+            />
         </>
-    );
-};
+    )
+}
 
 export default CustomTable
