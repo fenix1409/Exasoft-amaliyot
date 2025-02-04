@@ -4,7 +4,6 @@ import { instance } from '../../hook/useAxios';
 import { Input } from 'antd';
 
 const SignIn = () => {
-    // const { setToken } = useContext(Context);
     const [, setIsLoading] = useState<boolean>(false)
 
     const [userName, setUserName] = useState<string>("")
@@ -22,7 +21,6 @@ const SignIn = () => {
 
         try {
             const response = await instance().post(`/auths/sign-in`, loginData)
-            console.log(response);
             if (response.status === 200) {
                 const token = response.data
                 localStorage.setItem("authToken", token)

@@ -13,14 +13,14 @@ const AddModal: React.FC<AddModalProps> = ({ isOpen, closeModal }) => {
     const token = localStorage.getItem("authToken") || "" 
 
     function handleAdd(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        const data = { name, number };
+        e.preventDefault()
+        const data = { name, count: number }
         try {
             instance().post('/companies/add', data, {
                 headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
             }).then((response) => {
-                console.log(response)
-                // closeModal()
+                console.log(response.data)
+                closeModal()
             })
         } catch (error) {
             console.log(error)
@@ -35,7 +35,7 @@ const AddModal: React.FC<AddModalProps> = ({ isOpen, closeModal }) => {
                     <Input placeholder="Name of the company" size="large" onChange={(e) => setName(e.target.value)} type="text"/>
                 </label>
                 <label className="flex items-center gap-[116px]">
-                    <p className="text-[14px] leading-[22px]">Numpbers</p>
+                    <p className="text-[14px] leading-[22px]">Numbers</p>
                     <Input placeholder="Count of the workers" size="large" onChange={(e) => setNumber(Number(e.target.value))} type="number"/>
                 </label>
                 <button className="w-[166px] py-[4px] px-[15px] text-[14px] leading-[22px] text-white bg-[#1890FF] mx-auto block">Add Company</button>
