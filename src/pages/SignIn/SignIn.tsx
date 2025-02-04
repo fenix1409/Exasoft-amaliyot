@@ -24,6 +24,7 @@ const SignIn = () => {
             if (response.status === 200) {
                 const token = response.data
                 localStorage.setItem("authToken", token)
+                localStorage.setItem("user", JSON.stringify({ username: loginData.login }))
                 location.pathname = '/dashboard'
             } else {
                 alert("Login yoki parol xato!")
@@ -38,11 +39,11 @@ const SignIn = () => {
                 <h2 className='text-[36px] leading-[22px] font-bold mb-[21px]'>Sign In</h2>
                 <label className='mb-[21px] block'>
                     <span className='text-[14px] leading-[22px]'>Login</span>
-                    <Input placeholder='Enter login' onChange={(e) => setUserName(e.target.value)} size='large'/>
+                    <Input placeholder='Enter login' onChange={(e) => setUserName(e.target.value)} size='large' />
                 </label>
                 <label className='mb-[21px] block'>
                     <span className='text-[14px] leading-[22px]'>Password</span>
-                    <Input.Password placeholder='Enter login' onChange={(e) => setPassword(e.target.value)} size='large'/>
+                    <Input.Password placeholder='Enter login' onChange={(e) => setPassword(e.target.value)} size='large' />
                 </label>
                 <div className="flex flex-col space-y-[21px]">
                     <Link to={'/register'} className='text-[14px] leading-[22px] text-[#1890FF] mb-[21px]'>Register</Link>
